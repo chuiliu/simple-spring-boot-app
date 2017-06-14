@@ -24,7 +24,7 @@ public class UserService {
     @Inject
     private UserRepository userRepository;
 
-    public List<UserInfoVo> queryUserInfo() {
+    public List<UserInfoVo> queryAllUsers() {
         List<User> userList = userRepository.findAll();
         List<UserInfoVo> userInfoList = new ArrayList<UserInfoVo>();
 
@@ -37,11 +37,18 @@ public class UserService {
         return userInfoList;
     }
 
+    public UserInfoVo queryUserInfo(Long userId) {
+        User user = userRepository.findOne(userId);
+        UserInfoVo userInfo = new UserInfoVo();
+        BeanUtils.copyProperties(user, userInfo);
+        return userInfo;
+    }
+
     public Boolean addUser(AddUserForm userForm) {
         User user = new User();
         user.setName(userForm.getName());
         user.setAge(userForm.getAge());
-        user.setPassword("");
+        user.setPassword("1");
         user.setStatus(UserStatusEnum.VALID);
         User u = userRepository.save(user);
         System.out.print(u);
